@@ -724,7 +724,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cabe4fa914dec5870285fa7f71f602645da47c486e68486d2b4ceb4a343e90ac"
 
 [[package]]
-name = "rpg"
+name = "rust_graphics"
 version = "0.1.0"
 dependencies = [
  "sdl2",
