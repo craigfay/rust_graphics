@@ -1,55 +1,32 @@
-use sdl2::pixels::Color;
-use sdl2::event::Event;
-use sdl2::keyboard::Keycode;
-use sdl2::render::WindowCanvas;
-use std::time::Duration;
+extern crate piston_window;
+extern crate find_folder;
 
+use piston_window::*;
 
-fn render(canvas: &mut WindowCanvas, color: Color) {
-    canvas.set_draw_color(color);
-    canvas.clear();
-    canvas.present();
-}
-
-
-
-
-fn main() -> Result<(), String> {
-    let sdl_context = sdl2::init()?;
-    let video_subsystem = sdl_context.video()?;
-
-    let window = video_subsystem.window("rust-sdl2 demo", 800, 600)
-        .position_centered()
+fn main() {
+    let opengl = OpenGL::V3_2;
+    let mut window: PistonWindow =
+        WindowSettings::new("piston: image", [300, 300])
+        .exit_on_esc(true)
+        .graphics_api(opengl)
         .build()
-        .expect("could not initialize video subsystem");
+        .unwrap();
 
-    let mut canvas = window.into_canvas().build()
-        .expect("could not make a canvas");
+    let assets = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("assets").unwrap();
 
-    let mut event_pump = sdl_context.event_pump()?;
-    let mut i = 0;
-    'running: loop {
-        // Handle events
-        for event in event_pump.poll_iter() {
-            match event {
-                Event::Quit {..} |
-                Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
-                    break 'running;
-                },
-                _ => {}
-            }
-        }
-
-        // Update
-        i = (i + 1) % 255;
-
-        // Render
-        render(&mut canvas, Color::RGB(i, 64, 255 - i));
-
-        // Time Management
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+    let sprite_image = assets.join("overworld_characters.png");
+    let sprite_image: G2dTexture = Texture::from_path(
+            &mut window.create_texture_context(),
+            &sprite_image,
+            Flip::None,
+            &TextureSettings::new()
+        ).unwrap();
+    window.set_lazy(true);
+    while let Some(e) = window.next() {
+        window.draw_2d(&e, |c, g, _| {
+            clear([1.0; 4], g);
+            image(&sprite_image, c.transform, g);
+        });
     }
-
-    Ok(())
 }
-
