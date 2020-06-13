@@ -15,13 +15,14 @@ fn main() {
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
 
-    let sprite_image = assets.join("overworld_characters.png");
+    let sprite_image = assets.join("red_64_64.png");
     let sprite_image: G2dTexture = Texture::from_path(
             &mut window.create_texture_context(),
             &sprite_image,
             Flip::None,
             &TextureSettings::new()
         ).unwrap();
+
     window.set_lazy(true);
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g, _| {
