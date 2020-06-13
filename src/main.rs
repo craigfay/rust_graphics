@@ -1,33 +1,47 @@
-extern crate piston_window;
-extern crate find_folder;
+use amethyst::{
+    prelude::*,
+    renderer::{
+        plugins::{RenderFlat2D, RenderToWindow},
+        types::DefaultBackend,
+        RenderingBundle,
+    },
+    utils::application_root_dir,
+};
 
-use piston_window::*;
+pub struct SimpleGame;
 
-fn main() {
-    let opengl = OpenGL::V3_2;
-    let mut window: PistonWindow =
-        WindowSettings::new("piston: image", [300, 300])
-        .exit_on_esc(true)
-        .graphics_api(opengl)
-        .build()
-        .unwrap();
+impl SimpleState for SimpleGame {}
 
-    let assets = find_folder::Search::ParentsThenKids(3, 3)
-        .for_folder("assets").unwrap();
 
-    let sprite_image = assets.join("red_64_64.png");
-    let sprite_image: G2dTexture = Texture::from_path(
-            &mut window.create_texture_context(),
-            &sprite_image,
-            Flip::None,
-            &TextureSettings::new()
-        ).unwrap();
+fn main() -> amethyst::Result<()> {
 
-    window.set_lazy(true);
-    while let Some(e) = window.next() {
-        window.draw_2d(&e, |c, g, _| {
-            clear([1.0; 4], g);
-            image(&sprite_image, c.transform, g);
-        });
-    }
+    // Logging
+    amethyst::start_logger(Default::default());
+
+    // Display / Asset settings
+    let app_root = application_root_dir()?;
+    let display_config_path = app_root.join("config").join("display.ron");
+    let assets_dir = app_root.join("assets");
+
+    // Initialize game data
+    let game_data = GameDataBuilder::default()
+        .with_bundle(
+            RenderingBundle::<DefaultBackend>::new()
+                // The RenderToWindow plugin provides
+                // all the scaffolding for opening a window and drawing on it
+                .with_plugin(
+                    RenderToWindow::from_config_path(display_config_path)?
+                        .with_clear([0.0, 0.0, 0.0, 1.0]),
+                )
+                // RenderFlat2D plugin is used to render entities
+                // with a `SpriteRender` component.
+                .with_plugin(RenderFlat2D::default()),
+        )?;
+
+    // Start the game loop
+    let mut game = Application::new(assets_dir, SimpleGame, game_data)?;
+    game.run();
+    
+    Ok(())
 }
+
