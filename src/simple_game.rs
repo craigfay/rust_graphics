@@ -35,6 +35,10 @@ impl SimpleState for SimpleGame {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
         initialize_camera(world);
+
+        // Register and initialize tile components
+        world.register::<Tile>();
+        initialize_tiles(world);
     }
 }
 
@@ -51,3 +55,16 @@ fn initialize_camera(world: &mut World) {
         .build();
 }
 
+fn initialize_tiles(world: &mut World) {
+    let mut tile_1_transform = Transform::default();
+
+    // Position tile 1
+    let tile_1_y = DISPLAY_HEIGHT / 2.0;
+    let tile_1_x = DISPLAY_WIDTH / 2.0;
+
+    world
+        .create_entity()
+        .with(Tile { content: TileContent::Character })
+        .with(tile_1_transform)
+        .build();
+} 
