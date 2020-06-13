@@ -6,7 +6,11 @@ use amethyst::{
         RenderingBundle,
     },
     utils::application_root_dir,
+    //core::transform::TransformBundle,
 };
+
+use amethyst::core::transform::TransformBundle;
+
 
 mod simple_game;
 use crate::simple_game::SimpleGame;
@@ -34,7 +38,8 @@ fn main() -> amethyst::Result<()> {
                 // RenderFlat2D plugin is used to render entities
                 // with a `SpriteRender` component.
                 .with_plugin(RenderFlat2D::default()),
-        )?;
+        )?
+        .with_bundle(TransformBundle::new())?;
 
     // Start the game loop
     let mut game = Application::new(assets_dir, SimpleGame, game_data)?;

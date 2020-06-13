@@ -36,9 +36,12 @@ impl SimpleState for SimpleGame {
         let world = data.world;
         initialize_camera(world);
 
+        // Load the spritesheet necessary to render the graphics.
+        let sprite_sheet_handle = load_sprite_sheet(world);
+
         // Register and initialize tile components
         world.register::<Tile>();
-        initialize_tiles(world);
+        initialize_tiles(world, sprite_sheet_handle);
     }
 }
 
@@ -55,16 +58,49 @@ fn initialize_camera(world: &mut World) {
         .build();
 }
 
-fn initialize_tiles(world: &mut World) {
+fn initialize_tiles(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     let mut tile_1_transform = Transform::default();
 
     // Position tile 1
     let tile_1_y = DISPLAY_HEIGHT / 2.0;
     let tile_1_x = DISPLAY_WIDTH / 2.0;
+    tile_1_transform.set_translation_xyz(tile_1_x, tile_1_y, 0.0);
+
+    // Assign the sprites for the paddles
+    let sprite_render = SpriteRender {
+        sprite_sheet: sprite_sheet_handle,
+        sprite_number: 0, // paddle is the first sprite in the sprite_sheet
+    };
 
     world
         .create_entity()
         .with(Tile { content: TileContent::Character })
         .with(tile_1_transform)
+        .with(sprite_render)
         .build();
 } 
+
+fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
+    // Load the sprite sheet necessary to render the graphics.
+    // The texture is the pixel data
+    // `texture_handle` is a cloneable reference to the texture
+    let texture_handle = {
+        let loader = world.read_resource::<Loader>();
+        let texture_storage = world.read_resource::<AssetStorage<Texture>>();
+        loader.load(
+            "textures/overworld_character_tiles.png",
+            ImageFormat::default(),
+            (),
+            &texture_storage,
+        )
+    };
+
+    let loader = world.read_resource::<Loader>();
+    let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
+    loader.load(
+        "textures/overworld_character_tiles.ron",
+        SpriteSheetFormat(texture_handle),
+        (),
+        &sprite_sheet_store,
+    )
+}
