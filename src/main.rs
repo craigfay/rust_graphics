@@ -8,10 +8,8 @@ use amethyst::{
     utils::application_root_dir,
 };
 
-pub struct SimpleGame;
-
-impl SimpleState for SimpleGame {}
-
+mod simple_game;
+use crate::simple_game::SimpleGame;
 
 fn main() -> amethyst::Result<()> {
 
