@@ -6,8 +6,28 @@ use amethyst::{
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
 };
 
-pub const VIEW_HEIGHT: f32 = 100.0;
-pub const VIEW_WIDTH: f32 = 100.0;
+pub const DISPLAY_HEIGHT: f32 = 64.0;
+pub const DISPLAY_WIDTH: f32 = 64.0;
+
+pub const TILE_HEIGHT: f32 = 16.0;
+pub const TILE_WIDTH: f32 = 16.0;
+
+pub enum TileContent {
+   Character, 
+   Wall,
+   Floor,
+}
+
+pub struct Tile {
+    pub content: TileContent,
+}
+
+// By implementing Component, Tile can
+// now be attached to entities in the game
+impl Component for Tile {
+    type Storage = DenseVecStorage<Self>;
+}
+
 
 pub struct SimpleGame;
 
@@ -22,11 +42,11 @@ impl SimpleState for SimpleGame {
 // covers whole arena and (0, 0) is in the bottom left.
 fn initialize_camera(world: &mut World) {
     let mut transform = Transform::default();
-    transform.set_translation_xyz(VIEW_WIDTH * 0.5, VIEW_HEIGHT * 0.5, 1.0);
+    transform.set_translation_xyz(DISPLAY_WIDTH * 0.5, DISPLAY_HEIGHT * 0.5, 1.0);
 
     world
         .create_entity()
-        .with(Camera::standard_2d(VIEW_WIDTH, VIEW_HEIGHT))
+        .with(Camera::standard_2d(DISPLAY_WIDTH, DISPLAY_HEIGHT))
         .with(transform)
         .build();
 }
