@@ -6,9 +6,10 @@ use amethyst::{
         RenderingBundle,
     },
     utils::application_root_dir,
-    //core::transform::TransformBundle,
 };
 
+
+use amethyst::input::{InputBundle, StringBindings};
 use amethyst::core::transform::TransformBundle;
 
 
@@ -25,6 +26,11 @@ fn main() -> amethyst::Result<()> {
     let display_config_path = app_root.join("config").join("display.ron");
     let assets_dir = app_root.join("assets");
 
+    // Input bindings
+    let binding_path = app_root.join("config").join("bindings.ron");
+    let input_bundle = InputBundle::<StringBindings>::new()
+        .with_bindings_from_file(binding_path)?;
+
     // Initialize game data
     let game_data = GameDataBuilder::default()
         .with_bundle(
@@ -39,7 +45,8 @@ fn main() -> amethyst::Result<()> {
                 // with a `SpriteRender` component.
                 .with_plugin(RenderFlat2D::default()),
         )?
-        .with_bundle(TransformBundle::new())?;
+        .with_bundle(TransformBundle::new())?
+        .with_bundle(input_bundle)?;
 
     // Start the game loop
     let mut game = Application::new(assets_dir, SimpleGame, game_data)?;
