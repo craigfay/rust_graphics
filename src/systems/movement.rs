@@ -26,15 +26,13 @@ impl<'s> System<'s> for MovementSystem {
             let leftright = input.axis_value("leftright");
 
             if let Some(mv_amount) = updown {
-                if mv_amount != 0.0 {
-                    println!("updown is {}", mv_amount);
-                }
+                let scaled_amount = 1.2 * mv_amount as f32;
+                transform.prepend_translation_y(scaled_amount);
             }
 
             if let Some(mv_amount) = leftright {
-                if mv_amount != 0.0 {
-                    println!("leftright is {}", mv_amount);
-                }
+                let scaled_amount = 1.2 * mv_amount as f32;
+                transform.prepend_translation_x(scaled_amount);
             }
         }
     }
