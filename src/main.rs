@@ -16,6 +16,9 @@ use amethyst::core::transform::TransformBundle;
 mod simple_game;
 use crate::simple_game::SimpleGame;
 
+mod systems;
+use crate::systems::MovementSystem;
+
 fn main() -> amethyst::Result<()> {
 
     // Logging
@@ -46,7 +49,8 @@ fn main() -> amethyst::Result<()> {
                 .with_plugin(RenderFlat2D::default()),
         )?
         .with_bundle(TransformBundle::new())?
-        .with_bundle(input_bundle)?;
+        .with_bundle(input_bundle)?
+        .with(MovementSystem, "movement_system", &["input_system"]);
 
     // Start the game loop
     let mut game = Application::new(assets_dir, SimpleGame, game_data)?;
