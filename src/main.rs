@@ -29,6 +29,8 @@ fn main() -> amethyst::Result<()> {
     let display_config_path = app_root.join("config").join("display.ron");
     let assets_dir = app_root.join("assets");
 
+
+
     // Input bindings
     let binding_path = app_root.join("config").join("bindings.ron");
     let input_bundle = InputBundle::<StringBindings>::new()

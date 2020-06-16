@@ -6,8 +6,8 @@ use amethyst::{
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
 };
 
-pub const DISPLAY_HEIGHT: f32 = 64.0;
-pub const DISPLAY_WIDTH: f32 = 64.0;
+pub const DISPLAY_HEIGHT: f32 = 256.0;
+pub const DISPLAY_WIDTH: f32 = 256.0;
 
 pub const TILE_HEIGHT: f32 = 16.0;
 pub const TILE_WIDTH: f32 = 16.0;
