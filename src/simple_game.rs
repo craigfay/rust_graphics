@@ -20,6 +20,16 @@ pub enum TileContent {
 
 pub struct Tile {
     pub content: TileContent,
+    pub is_actionable: bool,
+}
+
+impl Tile {
+    pub fn main_character() -> Tile {
+        Tile {
+            content: TileContent::Character,
+            is_actionable: true,
+        }
+    }
 }
 
 // By implementing Component, Tile can
@@ -27,7 +37,6 @@ pub struct Tile {
 impl Component for Tile {
     type Storage = DenseVecStorage<Self>;
 }
-
 
 pub struct SimpleGame;
 
@@ -74,7 +83,7 @@ fn initialize_tiles(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>)
 
     world
         .create_entity()
-        .with(Tile { content: TileContent::Character })
+        .with(Tile::main_character())
         .with(tile_1_transform)
         .with(sprite_render)
         .build();
