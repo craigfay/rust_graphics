@@ -7,14 +7,14 @@ use amethyst::{
 };
 
 
-pub const TILE_HEIGHT: f32 = 16.0;
-pub const TILE_WIDTH: f32 = 16.0;
+pub const TILE_HEIGHT: usize = 16;
+pub const TILE_WIDTH: usize = 16;
 
-pub const TILE_ROWS: f32 = 16.0;
-pub const TILE_COLUMNS: f32 = 16.0;
+pub const TILE_ROWS: usize = 16;
+pub const TILE_COLUMNS: usize = 16;
 
-pub const DISPLAY_HEIGHT: f32 = TILE_ROWS * TILE_HEIGHT;
-pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS * TILE_WIDTH;
+pub const DISPLAY_HEIGHT: f32 = TILE_ROWS as f32 * TILE_HEIGHT as f32;
+pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS as f32 * TILE_WIDTH as f32;
 
 
 
@@ -29,6 +29,8 @@ impl TileOccupant {
         }
     }
 }
+
+pub type TileGrid = [[Option<TileOccupant>; TILE_COLUMNS]; TILE_ROWS];
 
 // By implementing Component, Tile can
 // now be attached to entities in the game
