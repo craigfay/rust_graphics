@@ -17,21 +17,14 @@ pub const DISPLAY_HEIGHT: f32 = TILE_ROWS * TILE_HEIGHT;
 pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS * TILE_WIDTH;
 
 
-pub enum TileContent {
-   Character, 
-   Wall,
-   Floor,
-}
 
 pub struct TileOccupant {
-    pub content: TileContent,
     pub is_actionable: bool,
 }
 
 impl TileOccupant {
     pub fn main_character() -> TileOccupant {
         TileOccupant {
-            content: TileContent::Character,
             is_actionable: true,
         }
     }

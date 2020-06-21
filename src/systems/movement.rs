@@ -3,7 +3,7 @@ use amethyst::derive::SystemDesc;
 use amethyst::ecs::{Join, Read, ReadStorage, System, SystemData, World, WriteStorage};
 use amethyst::input::{InputHandler, StringBindings};
 
-use crate::simple_game::{TileOccupant, TileContent, DISPLAY_WIDTH, DISPLAY_HEIGHT};
+use crate::simple_game::{TileOccupant, DISPLAY_WIDTH, DISPLAY_HEIGHT};
 
 #[derive(SystemDesc)]
 pub struct MovementSystem;
