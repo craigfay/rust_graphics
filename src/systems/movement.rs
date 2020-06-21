@@ -13,24 +13,26 @@ impl<'s> System<'s> for MovementSystem {
     // will operate on
     type SystemData = (
         WriteStorage<'s, Transform>,
-        ReadStorage<'s, Tile>,
+        WriteStorage<'s, Tile>,
         Read<'s, InputHandler<StringBindings>>,
     );
 
-    fn run(&mut self, (mut transforms, tiles, input): Self::SystemData) {
+    fn run(&mut self, (mut transforms, mut tiles, input): Self::SystemData) {
         // Iterating over all entities that have both a
         // tile component and a transform component
-        for (tile, transform) in (&tiles, &mut transforms).join() {
+        for (tile, transform) in (&mut tiles, &mut transforms).join() {
 
             let updown = input.axis_value("updown");
             let leftright = input.axis_value("leftright");
 
             if let Some(mv_amount) = updown {
+                tile.is_actionable = false;
                 let scaled_amount = 1.2 * mv_amount as f32;
                 transform.prepend_translation_y(scaled_amount);
             }
 
             if let Some(mv_amount) = leftright {
+                tile.is_actionable = false;
                 let scaled_amount = 1.2 * mv_amount as f32;
                 transform.prepend_translation_x(scaled_amount);
             }

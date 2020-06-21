@@ -6,11 +6,17 @@ use amethyst::{
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
 };
 
-pub const DISPLAY_HEIGHT: f32 = 256.0;
-pub const DISPLAY_WIDTH: f32 = 256.0;
 
 pub const TILE_HEIGHT: f32 = 16.0;
 pub const TILE_WIDTH: f32 = 16.0;
+
+pub const TILE_ROWS: f32 = 16.0;
+pub const TILE_COLUMNS: f32 = 16.0;
+
+pub const DISPLAY_HEIGHT: f32 = TILE_ROWS * TILE_HEIGHT;
+pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS * TILE_WIDTH;
+
+
 
 pub enum TileContent {
    Character, 
