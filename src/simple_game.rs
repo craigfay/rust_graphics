@@ -17,21 +17,20 @@ pub const DISPLAY_HEIGHT: f32 = TILE_ROWS * TILE_HEIGHT;
 pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS * TILE_WIDTH;
 
 
-
 pub enum TileContent {
    Character, 
    Wall,
    Floor,
 }
 
-pub struct Tile {
+pub struct TileOccupant {
     pub content: TileContent,
     pub is_actionable: bool,
 }
 
-impl Tile {
-    pub fn main_character() -> Tile {
-        Tile {
+impl TileOccupant {
+    pub fn main_character() -> TileOccupant {
+        TileOccupant {
             content: TileContent::Character,
             is_actionable: true,
         }
@@ -40,7 +39,7 @@ impl Tile {
 
 // By implementing Component, Tile can
 // now be attached to entities in the game
-impl Component for Tile {
+impl Component for TileOccupant {
     type Storage = DenseVecStorage<Self>;
 }
 
@@ -55,7 +54,7 @@ impl SimpleState for SimpleGame {
         let sprite_sheet_handle = load_sprite_sheet(world);
 
         // Register and initialize tile components
-        world.register::<Tile>();
+        world.register::<TileOccupant>();
         initialize_tiles(world, sprite_sheet_handle);
     }
 }
@@ -89,7 +88,7 @@ fn initialize_tiles(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>)
 
     world
         .create_entity()
-        .with(Tile::main_character())
+        .with(TileOccupant::main_character())
         .with(tile_1_transform)
         .with(sprite_render)
         .build();
