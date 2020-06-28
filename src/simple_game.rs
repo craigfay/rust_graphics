@@ -18,6 +18,8 @@ pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS as f32 * TILE_WIDTH as f32;
 
 
 
+#[derive(Clone)]
+#[derive(Copy)]
 pub struct TileOccupant {
     pub is_actionable: bool,
 }
@@ -30,18 +32,38 @@ impl TileOccupant {
     }
 }
 
-pub type TileGrid = [[Option<TileOccupant>; TILE_COLUMNS]; TILE_ROWS];
-
 // By implementing Component, Tile can
 // now be attached to entities in the game
 impl Component for TileOccupant {
     type Storage = DenseVecStorage<Self>;
 }
 
+
+
+pub type TileGrid = [[Option<TileOccupant>; TILE_COLUMNS]; TILE_ROWS];
+
+pub struct Room {
+   tiles: TileGrid,
+}
+
+impl Room {
+    fn empty() -> Room {
+        Room {
+            tiles: [[None; TILE_COLUMNS]; TILE_ROWS]
+        }
+    }
+}
+
+impl Component for Room {
+    type Storage = DenseVecStorage<Self>;
+}
+
+
 pub struct SimpleGame;
 
 impl SimpleState for SimpleGame {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
+
         let world = data.world;
         initialize_camera(world);
 
@@ -50,7 +72,10 @@ impl SimpleState for SimpleGame {
 
         // Register and initialize tile components
         world.register::<TileOccupant>();
-        initialize_tiles(world, sprite_sheet_handle);
+        world.register::<Room>();
+
+        initialize_room(world);
+        draw_initial_sprites(world, sprite_sheet_handle);
     }
 }
 
@@ -66,8 +91,15 @@ fn initialize_camera(world: &mut World) {
         .with(transform)
         .build();
 }
+    
+fn initialize_room(world: &mut World) {
+    world
+        .create_entity()
+        .with(Room::empty())
+        .build();
+}
 
-fn initialize_tiles(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+fn draw_initial_sprites(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     let mut tile_1_transform = Transform::default();
 
     // Position tile 1
@@ -75,7 +107,7 @@ fn initialize_tiles(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>)
     let tile_1_x = DISPLAY_WIDTH / 2.0;
     tile_1_transform.set_translation_xyz(tile_1_x, tile_1_y, 0.0);
 
-    // Assign the sprites for the paddles
+    // Assign the sprite
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet_handle,
         sprite_number: 0, // paddle is the first sprite in the sprite_sheet
