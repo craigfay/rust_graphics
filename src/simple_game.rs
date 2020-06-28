@@ -16,18 +16,21 @@ pub const TILE_COLUMNS: usize = 16;
 pub const DISPLAY_HEIGHT: f32 = TILE_ROWS as f32 * TILE_HEIGHT as f32;
 pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS as f32 * TILE_WIDTH as f32;
 
-
-
+#[derive(Debug)]
 #[derive(Clone)]
 #[derive(Copy)]
 pub struct TileOccupant {
     pub is_actionable: bool,
+    pub x_position: i8,
+    pub y_position: i8,
 }
 
 impl TileOccupant {
     pub fn main_character() -> TileOccupant {
         TileOccupant {
             is_actionable: true,
+            x_position: 0,
+            y_position: 0,
         }
     }
 }
@@ -37,8 +40,6 @@ impl TileOccupant {
 impl Component for TileOccupant {
     type Storage = DenseVecStorage<Self>;
 }
-
-
 
 pub type TileGrid = [[Option<TileOccupant>; TILE_COLUMNS]; TILE_ROWS];
 
@@ -93,9 +94,12 @@ fn initialize_camera(world: &mut World) {
 }
     
 fn initialize_room(world: &mut World) {
+    let mut room = Room::empty();
+    room.tiles[4][4] = Some(TileOccupant::main_character());
+
     world
         .create_entity()
-        .with(Room::empty())
+        .with(room)
         .build();
 }
 
