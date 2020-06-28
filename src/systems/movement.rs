@@ -33,20 +33,20 @@ impl<'s> System<'s> for MovementSystem {
             let leftright = input.axis_value("leftright");
 
             if let Some(mv_amount) = updown {
-                let new_y_position = occupant.y_position + mv_amount as i8;
+                let new_y_position = occupant.position.y + mv_amount as i8;
                 if new_y_position >= 0 && new_y_position < TILE_ROWS as i8 {
                     let scaled_amount = 1.2 * mv_amount as f32;
-                    occupant.y_position = new_y_position;
+                    occupant.position.y = new_y_position;
                     transform.prepend_translation_y(scaled_amount);
                 }
 
             }
 
             if let Some(mv_amount) = leftright {
-                let new_x_position = occupant.x_position + mv_amount as i8;
+                let new_x_position = occupant.position.x + mv_amount as i8;
                 if new_x_position >= 0 && new_x_position < TILE_COLUMNS as i8 {
                     let scaled_amount = 1.2 * mv_amount as f32;
-                    occupant.x_position = new_x_position;
+                    occupant.position.x = new_x_position;
                     transform.prepend_translation_x(scaled_amount);
                 }
             }
