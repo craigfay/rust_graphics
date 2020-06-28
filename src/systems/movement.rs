@@ -36,10 +36,10 @@ impl<'s> System<'s> for MovementSystem {
         // tile component and a transform component
         for (occupant, transform) in (&mut occupants, &mut transforms).join() {
 
-            let updown = input.axis_value("updown");
-            let leftright = input.axis_value("leftright");
+            let vertical = input.axis_value("y");
+            let horizontal = input.axis_value("x");
 
-            if let Some(mv_amount) = updown {
+            if let Some(mv_amount) = vertical {
                 let new_position = Position {
                     x: occupant.position.x,
                     y: occupant.position.y + mv_amount as i8,
@@ -51,7 +51,7 @@ impl<'s> System<'s> for MovementSystem {
                 }
             }
 
-            if let Some(mv_amount) = leftright {
+            if let Some(mv_amount) = horizontal {
                 let new_position = Position {
                     x: occupant.position.x + mv_amount as i8,
                     y: occupant.position.y,
