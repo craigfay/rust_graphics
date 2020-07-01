@@ -115,12 +115,14 @@ fn initialize_room(world: &mut World) {
 }
 
 fn draw_initial_sprites(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
-    let mut tile_1_transform = Transform::default();
+    let mut main_character_transform = Transform::default();
 
-    // Position tile 1
-    let x = TILE_SIZE;
-    let y = TILE_SIZE;
-    tile_1_transform.set_translation_xyz(x, y, 0.0);
+    // Set the sprite's translation
+    let sprite_width = 16.0;
+    let sprite_height = 16.0;
+    let x = TILE_SIZE - (sprite_width / 2.0);
+    let y = TILE_SIZE - (sprite_height / 2.0);
+    main_character_transform.set_translation_xyz(x, y, 0.0);
 
     // Assign the sprite
     let sprite_render = SpriteRender {
@@ -131,7 +133,7 @@ fn draw_initial_sprites(world: &mut World, sprite_sheet_handle: Handle<SpriteShe
     world
         .create_entity()
         .with(TileOccupant::main_character())
-        .with(tile_1_transform)
+        .with(main_character_transform)
         .with(sprite_render)
         .build();
 } 
