@@ -16,6 +16,10 @@ pub const TILE_COLUMNS: usize = 16;
 pub const DISPLAY_HEIGHT: f32 = TILE_ROWS as f32 * TILE_HEIGHT as f32;
 pub const DISPLAY_WIDTH: f32 = TILE_COLUMNS as f32 * TILE_WIDTH as f32;
 
+pub const TILE_SIZE: f32 = DISPLAY_WIDTH as f32 / TILE_WIDTH as f32;
+
+
+
 
 #[derive(Debug)]
 #[derive(Clone)]
@@ -114,9 +118,9 @@ fn draw_initial_sprites(world: &mut World, sprite_sheet_handle: Handle<SpriteShe
     let mut tile_1_transform = Transform::default();
 
     // Position tile 1
-    let tile_1_y = DISPLAY_HEIGHT / 2.0;
-    let tile_1_x = DISPLAY_WIDTH / 2.0;
-    tile_1_transform.set_translation_xyz(tile_1_x, tile_1_y, 0.0);
+    let x = TILE_SIZE;
+    let y = TILE_SIZE;
+    tile_1_transform.set_translation_xyz(x, y, 0.0);
 
     // Assign the sprite
     let sprite_render = SpriteRender {

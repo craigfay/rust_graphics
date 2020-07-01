@@ -10,11 +10,11 @@ use crate::simple_game::{
     DISPLAY_HEIGHT,
     TILE_ROWS,
     TILE_COLUMNS,
+    TILE_SIZE,
 };
 
 #[derive(SystemDesc)]
 pub struct MovementSystem;
-
 
 fn position_is_obstructed(p: &Position) -> bool {
     if p.y < 0 || p.y >= TILE_ROWS as i8 { return true }
@@ -39,27 +39,35 @@ impl<'s> System<'s> for MovementSystem {
             let vertical = input.axis_value("y");
             let horizontal = input.axis_value("x");
 
-            if let Some(mv_amount) = vertical {
-                let new_position = Position {
-                    x: occupant.position.x,
-                    y: occupant.position.y + mv_amount as i8,
-                };
-                if !position_is_obstructed(&new_position) {
-                    let scaled_amount = 1.2 * mv_amount as f32;
-                    occupant.position.y = new_position.y;
-                    transform.prepend_translation_y(scaled_amount);
+            if let Some(mv_amount) = vertical{
+                if mv_amount != 0.0 {
+                    let new_position = Position {
+                        x: occupant.position.x,
+                        y: occupant.position.y + mv_amount as i8,
+                    };
+                    if !position_is_obstructed(&new_position) {
+                        let y_position_in_pixels = TILE_SIZE
+                            * mv_amount as f32;
+                    
+                        occupant.position.y = new_position.y;
+                        transform.prepend_translation_y(y_position_in_pixels);
+                    }
                 }
             }
 
             if let Some(mv_amount) = horizontal {
-                let new_position = Position {
-                    x: occupant.position.x + mv_amount as i8,
-                    y: occupant.position.y,
-                };
-                if !position_is_obstructed(&new_position) {
-                    let scaled_amount = 1.2 * mv_amount as f32;
-                    occupant.position.x = new_position.x;
-                    transform.prepend_translation_x(scaled_amount);
+                if mv_amount != 0.0 {
+                    let new_position = Position {
+                        x: occupant.position.x + mv_amount as i8,
+                        y: occupant.position.y,
+                    };
+                    if !position_is_obstructed(&new_position) {
+                        let x_position_in_pixels = TILE_SIZE
+                            * mv_amount as f32;
+                    
+                        occupant.position.x = new_position.x;
+                        transform.prepend_translation_x(x_position_in_pixels);
+                    }
                 }
             }
         }
